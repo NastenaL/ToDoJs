@@ -1,0 +1,43 @@
+.checklist {
+  width: 25%;
+  height: 25%;
+  position: relative;
+  text-align: center;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #04AA6D;
+  display: inline-block;
+  padding: 10px;
+}
+
+input[type=submit] {
+	background-color: #04AA6D;
+	border: 1px solid green;
+	color: white;
+}
+
+.btn-group button {
+	background-color: #04AA6D;
+	border: 1px solid green;
+	color: white;
+	padding: 10px 24px; 
+	cursor: pointer; 
+	float: left; 
+}
+
+.btn-group button:not(:last-child) {
+	border-right: none;
+}
+
+.counter {
+	padding: 10px 1em 0 auto;
+}
+
+#footer {
+	position : absolute;
+    bottom : 0;
+    height : 40px;
+    margin-top : 40px;
+	display:block;
+}
+
