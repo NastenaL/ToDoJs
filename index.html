@@ -7,22 +7,24 @@
 <body>
 <div class="checklist">
 	<h1>ToDo</h1>
-	<form id="fieldBoard" onsubmit="return createItem()">
+	<form onsubmit="createItem(event)">
 		<input type="text" id="todoField" placeholder="What needs to be done?" minlength="3" maxlength="200">
-		<input type="submit" value="Submit">
+		<button type="submit">Submit</button>
   
 		<div id="toDoItems"></div>
 	</form>
 	
 	<div class="btn-group" >
-		<button>All</button> 
-		<button>Active</button> 
-		<button onclick="doneItem">Completed</button>
-		<div id="counter"></div>
+		<button onclick="getAllItems()">All</button> 
+		<button onclick="getItemsByStatus(true)">Active</button> 
+		<button onclick="getItemsByStatus(false)">Completed</button>
+		<p id="counter"></p>
 	</div>
 </div>
 
-<script src="js/script.js"></script>
-<footer id="footer">Double-click to edit a todo</footer>
+<footer>Double-click to edit a todo</footer>
+<script src="js/main.js"></script>
+<script src="js/render.js"></script>
+<script src="js/filter.js"></script>
 </body>
 </html>
