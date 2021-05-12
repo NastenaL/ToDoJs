@@ -1,6 +1,6 @@
 .checklist {
-  width: 50%;
-  height: 50%;
+  max-width: 800px;
+  max-height: 600px;
   position: relative;
   text-align: left;
   border-style: solid;
@@ -8,6 +8,10 @@
   border-color: #04AA6D;
   display: inline-block;
   padding: 10px;
+}
+
+.clearAll {
+	display: none;
 }
 
 button {

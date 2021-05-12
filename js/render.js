@@ -4,6 +4,8 @@ function renderCounter(items) {
 
 function renderItems(items){
 	itemsBoard.innerHTML = '';
+    var selectAll = createSelectAllButton();
+    itemsBoard.appendChild(selectAll);
 
 	items.forEach((item, i) => {
 		var div = createParentDiv(item, i);
@@ -27,7 +29,7 @@ function renderItems(items){
 function createParentDiv(item, i)
 {
     var div = document.createElement('div');
-	div.id = "div_item"+i;
+	div.id = "div_item" + i;
 		
 	if(!item.isActive)
 	{
@@ -50,7 +52,7 @@ function createStatusCheckBox(item, i)
 {
     var checkbox = document.createElement('input');
 		checkbox.type = "checkbox";
-		checkbox.id = "id"+i;
+		checkbox.id = "id" + i;
 		checkbox.checked = !item.isActive;
 
 		checkbox.addEventListener("change", function () {
@@ -63,7 +65,7 @@ function createStatusCheckBox(item, i)
 function createDeleteItemButton(i)
 {
     var deleteButton = document.createElement('button');
-		deleteButton.id = "delete_item"+i;
+		deleteButton.id = "delete_item" + i;
 		deleteButton.textContent = "x";
 		deleteButton.style.display = 'none';
 
@@ -72,4 +74,16 @@ function createDeleteItemButton(i)
 		});
 
         return deleteButton;
+}
+
+function createSelectAllButton()
+{
+    var selectAll = document.createElement('button');
+    selectAll.textContent = "SelectAll";
+
+    selectAll.addEventListener('click', function () {
+		completedAllItems();
+	});
+
+    return selectAll;
 }

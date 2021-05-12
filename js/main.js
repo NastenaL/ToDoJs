@@ -6,7 +6,8 @@ var counter = document.getElementById('counter');
 function createItem(event) {
 	event.preventDefault();
 	newItem.value = newItem.value.trim(' ');
-
+	newItem.value = newItem.value.trunc(10);
+	
 	let isCorrectSymbols = newItem.value.match(/^[A-Za-z0-9?!,.%&@*]+$/) === null;
 	let isWithinLenght = newItem.value.length >= 3 && newItem.value.length <= 200;
 
