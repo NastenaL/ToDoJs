@@ -7,11 +7,17 @@ document.addEventListener("DOMContentLoaded", getFromStorage);
 
 function getFromStorage() {
 	var itemsFromStorage = myStorage.getItem('items');
-	console.log();
+	var newItemFromStorage = myStorage.getItem('newItem');
+	console.log(newItemFromStorage);
 	if(itemsFromStorage.length > 0)
 	{
 		items = JSON.parse(itemsFromStorage);
 		renderItems(items);
+	}
+
+	if(newItemFromStorage != null)
+	{
+		newItem.value = newItemFromStorage;
 	}
 }
 
@@ -30,8 +36,9 @@ function createItem(event) {
 		items.push(todoItem);
 		renderItems(items);
 	}
-
+	newItem.value = '';
 	localStorage.setItem('items', JSON.stringify(items));
+	localStorage.removeItem('newItem');
 }
 
 function editItem(i) {
@@ -57,4 +64,9 @@ function showClearAllButton() {
     var completedItems = items.filter(item => item.isActive === false);
     var clearButton = document.getElementById('clearAll');
     clearButton.style.display = completedItems.length > 0 ? 'inline' : 'none';
+}
+
+function saveToStorage()
+{
+    localStorage.setItem('newItem', newItem.value);
 }
