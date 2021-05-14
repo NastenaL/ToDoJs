@@ -18,18 +18,7 @@ function renderItems(items){
 			renderTextInput(i);
 		});
 
-        var textInput  = document.createElement('input');
-        textInput.type = "text";
-        textInput.id = "text_item" + i;
-        textInput.value = item.text;
-        textInput.style.display = 'none';
-        textInput.addEventListener("keydown", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-			    editItem(i);
-            }
-        });
-
+        var textInput  = createTextInput(item, i);
 		var deleteButton = createDeleteItemButton(i);
 
 		div.appendChild(checkbox);
@@ -46,10 +35,26 @@ function renderItems(items){
 function renderTextInput(i) {
     var span = document.getElementById('span' + i);
     span.style.display = 'none';
-    let button = document.getElementById('delete_item' + i);
+    var button = document.getElementById('delete_item' + i);
 		button.style.display = 'none';
     var textInput = document.getElementById('text_item' + i);
     textInput.style.display = 'inline';
+}
+
+function createTextInput(item, i)
+{
+    var textInput  = document.createElement('input');
+        textInput.type = "text";
+        textInput.id = "text_item" + i;
+        textInput.value = item.text;
+        textInput.style.display = 'none';
+        textInput.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+			    editItem(i);
+            }
+        });
+        return textInput;
 }
 
 function createParentDiv(item, i)
@@ -82,7 +87,7 @@ function createStatusCheckBox(item, i)
 		checkbox.checked = !item.isActive;
 
 		checkbox.addEventListener("change", function () {
-			changeStatusTask(i, !item.isActive);
+			changeItemStatus(i, !item.isActive);
 		});
     
         return checkbox;

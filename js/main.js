@@ -21,10 +21,7 @@ function createItem(event) {
 }
 
 function editItem(i) {
-	var editI = document.getElementById('text_item'+i);
-	console.log(editI);
-	items[i].text = editI.value;
-
+	items[i].text = document.getElementById('text_item'+i).value;
 	renderItems(items);
 }
 
@@ -36,5 +33,12 @@ function deleteItem(i) {
 function changeItemStatus(i, state)
 {
 	items[i].isActive = state;
+	showClearAllButton();
 	renderItems(items);
+}
+
+function showClearAllButton() {
+    var completedItems = items.filter(item => item.isActive === false);
+    var clearButton = document.getElementById('clearAll');
+    clearButton.style.display = completedItems.length > 0 ? 'inline' : 'none';
 }
