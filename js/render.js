@@ -2,7 +2,7 @@ function renderCounter(items) {
 	counter.innerHTML = items.length === 0 ? '' : items.length + ' items left';
 }
 
-function renderItems(items){
+function renderItems(items) {
 	itemsBoard.innerHTML = '';
     var selectAll = createSelectAllButton();
     itemsBoard.appendChild(selectAll);
@@ -10,14 +10,7 @@ function renderItems(items){
 	items.forEach((item, i) => {
 		var div = createParentDiv(item, i);
 		var checkbox = createStatusCheckBox(item, i);
-
-		var span = document.createElement('span');
-		span.innerText = item.text;
-        span.id = "span" + i;
-        span.addEventListener('dblclick', function () {
-			renderTextInput(i);
-		});
-
+		var span = createSpan(item, i);
         var textInput  = createTextInput(item, i);
 		var deleteButton = createDeleteItemButton(i);
 
@@ -32,11 +25,23 @@ function renderItems(items){
 	renderCounter(items);
 }
 
+function createSpan(item, i) {
+    var span = document.createElement('span');
+    span.innerText = item.text;
+    span.id = "span" + i;
+    span.addEventListener('dblclick', function () {
+        renderTextInput(i);
+    });
+    return span;
+}
+
 function renderTextInput(i) {
+    var checkbox = document.getElementById('checkbox' + i);
+    checkbox.style.display = 'none';
     var span = document.getElementById('span' + i);
     span.style.display = 'none';
     var button = document.getElementById('delete_item' + i);
-		button.style.display = 'none';
+	button.style.display = 'none';
     var textInput = document.getElementById('text_item' + i);
     textInput.style.display = 'inline';
 }
@@ -51,9 +56,13 @@ function createTextInput(item, i)
         textInput.addEventListener("keydown", function(event) {
             if (event.key === "Enter") {
                 event.preventDefault();
-			    editItem(i);
+                editItem(i);
             }
         });
+        textInput.addEventListener("blur", function() {
+			editItem(i);
+        });
+
         return textInput;
 }
 
@@ -65,6 +74,7 @@ function createParentDiv(item, i)
 	if(!item.isActive)
 	{
 		div.style.textDecoration = 'line-through';
+        div.style.opacity = "0.5";
 	}
 
 	div.addEventListener("mouseenter", function () {
@@ -83,7 +93,7 @@ function createStatusCheckBox(item, i)
 {
     var checkbox = document.createElement('input');
 		checkbox.type = "checkbox";
-		checkbox.id = "id" + i;
+		checkbox.id = "checkbox" + i;
 		checkbox.checked = !item.isActive;
 
 		checkbox.addEventListener("change", function () {

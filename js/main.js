@@ -2,6 +2,18 @@ var items = [];
 var itemsBoard = document.getElementById('toDoItems');
 var newItem = document.getElementById('todoField');
 var counter = document.getElementById('counter');
+var myStorage = window.localStorage;
+document.addEventListener("DOMContentLoaded", getFromStorage);
+
+function getFromStorage() {
+	var itemsFromStorage = myStorage.getItem('items');
+	console.log();
+	if(itemsFromStorage.length > 0)
+	{
+		items = JSON.parse(itemsFromStorage);
+		renderItems(items);
+	}
+}
 
 function createItem(event) {
 	event.preventDefault();
@@ -18,16 +30,20 @@ function createItem(event) {
 		items.push(todoItem);
 		renderItems(items);
 	}
+
+	localStorage.setItem('items', JSON.stringify(items));
 }
 
 function editItem(i) {
 	items[i].text = document.getElementById('text_item'+i).value;
 	renderItems(items);
+	localStorage.setItem('items', JSON.stringify(items));
 }
 
 function deleteItem(i) {
 	items.splice(i, 1);
 	renderItems(items);
+	localStorage.setItem('items', JSON.stringify(items));
 }
 
 function changeItemStatus(i, state)
