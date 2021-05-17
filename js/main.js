@@ -1,8 +1,8 @@
-var items = [];
-var itemsBoard = document.getElementById('toDoItems');
-var newItem = document.getElementById('todoField');
-var counter = document.getElementById('counter');
-var myStorage = window.localStorage;
+let items = [];
+let itemsBoard = document.getElementById('toDoItems');
+let newItem = document.getElementById('todoField');
+let counter = document.getElementById('counter');
+let myStorage = window.localStorage;
 document.addEventListener("DOMContentLoaded", getFromStorage);
 
 const filters = {
@@ -12,12 +12,11 @@ const filters = {
 }
 
 let currentFilter = filters.ALL;
-
-var btns = document.getElementsByClassName('btn');
+let btns = document.getElementsByClassName('btn');
 
 function changeSelectedButton()
 {
-    var current = document.getElementsByClassName('active');
+    let current = document.getElementsByClassName('active');
     current[0].className = current[0].className.replace(' active', "");
     let filter = localStorage.getItem('filter');
     switch (filter) {
@@ -37,23 +36,6 @@ for (var i = 0; i < btns.length; i++) {
   btns[i].addEventListener('click', function(){
     changeSelectedButton();
   });
-}
-
-function getFromStorage() {
-	var itemsFromStorage = myStorage.getItem('items');
-	var newItemFromStorage = myStorage.getItem('newItem');
-
-	if(itemsFromStorage.length > 0)
-	{
-		items = JSON.parse(itemsFromStorage);
-		renderItems(currentFilter);
-	}
-
-	if(newItemFromStorage != null)
-	{
-		newItem.value = newItemFromStorage;
-	}
-	changeSelectedButton();
 }
 
 function createItem(event) {
@@ -96,11 +78,7 @@ function changeItemStatus(i, state) {
 }
 
 function showClearAllButton() {
-    var completedItems = items.filter(item => item.isActive === false);
-    var clearButton = document.getElementById('clearAll');
+    let completedItems = items.filter(item => item.isActive === false);
+    let clearButton = document.getElementById('clearAll');
     clearButton.style.display = completedItems.length > 0 ? 'inline' : 'none';
-}
-
-function saveToStorage() {
-    localStorage.setItem('newItem', newItem.value);
 }
