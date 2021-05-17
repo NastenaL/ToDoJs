@@ -2,15 +2,24 @@ function renderCounter(items) {
 	counter.innerHTML = items.length === 0 ? items.length + ' item' : items.length + ' items left';
 }
 
-function checkFilter(currentItems){
-    switch (currentFilter) {
+function checkFilter(currentItems) {
+    let filter = localStorage.getItem('filter');
+    if(filter != null){
+        currentFilter = filter;
+    }
+
+    console.log(filter);
+    switch (filter) {
         case filters.ACTIVE:
+            console.log(1);
             currentItems = items.filter(item => item.isActive);
             break;
         case filters.ALL:
+            console.log('all');
             currentItems = items;
             break;
         case filters.COMPLETED:
+            console.log(2);
             currentItems = items.filter(item => !item.isActive);
             break;
       };
@@ -167,8 +176,17 @@ function createSelectAllButton()
     selectAll.style.margin = "10px";
 
     selectAll.addEventListener('click', function () {
-		completedAllItems();
+		selectAllItems();
 	});
 
     return selectAll;
+}
+
+var btns = document.getElementsByClassName('btn');
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener('click', function(){
+    var current = document.getElementsByClassName('active');
+    current[0].className = current[0].className.replace(' active', "");
+    this.className += ' active';
+  });
 }

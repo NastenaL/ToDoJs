@@ -10,6 +10,7 @@ const filters = {
 	ACTIVE: "active",
 	COMPLETED: "completed"
 }
+
 let currentFilter = filters.ALL;
 
 function getFromStorage() {
@@ -61,8 +62,7 @@ function deleteItem(i) {
 	localStorage.setItem('items', JSON.stringify(items));
 }
 
-function changeItemStatus(i, state)
-{
+function changeItemStatus(i, state) {
 	items[i].isActive = state;
 	showClearAllButton();
 	renderItems(items);
@@ -74,17 +74,6 @@ function showClearAllButton() {
     clearButton.style.display = completedItems.length > 0 ? 'inline' : 'none';
 }
 
-function saveToStorage()
-{
+function saveToStorage() {
     localStorage.setItem('newItem', newItem.value);
-}
-
-var btns = document.getElementsByClassName('btn');
-console.log("btn" + btns);
-for (var i = 0; i < btns.length; i++) {
-  btns[i].addEventListener('click', function(){
-    var current = document.getElementsByClassName('active');
-    current[0].className = current[0].className.replace(' active', "");
-    this.className += ' active';
-  });
 }
