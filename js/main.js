@@ -38,7 +38,19 @@ for (var i = 0; i < btns.length; i++) {
   });
 }
 
-function createItem(event) {
+function changeItemStatus(i, state) {
+	items[i].isActive = state;
+	showClearAllButton();
+	renderItems(currentFilter);
+}
+
+function showClearAllButton() {
+    let completedItems = items.filter(item => item.isActive === false);
+    let clearButton = document.getElementById('clearAll');
+    clearButton.style.display = completedItems.length > 0 ? 'inline' : 'none';
+}
+
+function onCreateItem(event) {
 	event.preventDefault();
 	newItem.value = newItem.value.trim(' ');
 
@@ -69,16 +81,4 @@ function deleteItem(i) {
 	items.splice(i, 1);
 	renderItems(currentFilter);
 	localStorage.setItem('items', JSON.stringify(items));
-}
-
-function changeItemStatus(i, state) {
-	items[i].isActive = state;
-	showClearAllButton();
-	renderItems(currentFilter);
-}
-
-function showClearAllButton() {
-    let completedItems = items.filter(item => item.isActive === false);
-    let clearButton = document.getElementById('clearAll');
-    clearButton.style.display = completedItems.length > 0 ? 'inline' : 'none';
 }

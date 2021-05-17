@@ -7,7 +7,7 @@
 <body>
 <div class="checklist">
 	<h1>ToDo</h1>
-	<form onsubmit="createItem(event)">
+	<form onsubmit="onCreateItem(event)">
 		<input type="text" id="todoField" placeholder="What needs to be done?" minlength="3" maxlength="200" onchange="saveToStorage()">
 		<button type="submit">Submit</button>
   
@@ -15,9 +15,9 @@
 	</form>
 	
 	<div class="btn-group" >
-		<button class="btn active" onclick="getAllItems()">All</button> 
-		<button class="btn" onclick="getItemsByStatus(true)">Active</button> 
-		<button class="btn" onclick="getItemsByStatus(false)">Completed</button>
+		<button class="btn active" onclick="filterItemsByStatus(filters.ALL)">All</button> 
+		<button class="btn" onclick="filterItemsByStatus(filters.ACTIVE)">Active</button> 
+		<button class="btn" onclick="filterItemsByStatus(filters.COMPLETED)">Completed</button>
 		<button onclick="clearItems()" class="clearAll" id="clearAll">Clear completed</button>
 		<p id="counter"></p>
 	</div>

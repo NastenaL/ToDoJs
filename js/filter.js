@@ -1,13 +1,6 @@
-function getItemsByStatus(status) {
-    currentFilter = status? filters.ACTIVE : filters.COMPLETED;2
+function filterItemsByStatus(currentFilter) {
     localStorage.setItem('filter', currentFilter);
     localStorage.setItem('items', JSON.stringify(items));
-    renderItems(currentFilter);
-}
-
-function getAllItems() {
-    currentFilter = filters.ALL;
-    localStorage.setItem('filter', currentFilter);
     renderItems(currentFilter);
 }
 
