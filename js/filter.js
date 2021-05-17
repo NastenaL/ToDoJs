@@ -26,3 +26,23 @@ function selectAllItems() {
     }
     renderItems();
 }
+
+function checkFilter() {
+    var filter = localStorage.getItem('filter');
+    if(filter != null){
+        currentFilter = filter;
+    }
+    var filteredItems = [];
+    switch (filter) {
+        case filters.ACTIVE:
+            filteredItems = items.filter(item => item.isActive);
+            break;
+        case filters.ALL:
+            filteredItems = items;
+            break;
+        case filters.COMPLETED:
+            filteredItems = items.filter(item => !item.isActive);
+            break;
+    };
+    return filteredItems;
+}

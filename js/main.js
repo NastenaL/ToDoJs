@@ -1,10 +1,10 @@
-let items = [];
-let itemsBoard = document.getElementById('toDoItems');
-let newItem = document.getElementById('todoField');
-let counter = document.getElementById('counter');
-let clearButton = document.getElementById('clearAll');
+var items = [];
+var itemsBoard = document.getElementById('toDoItems');
+var newItem = document.getElementById('todoField');
+var counter = document.getElementById('counter');
+var clearButton = document.getElementById('clearAll');
 
-let myStorage = window.localStorage;
+var myStorage = window.localStorage;
 document.addEventListener("DOMContentLoaded", getFromStorage);
 
 const filters = {
@@ -13,14 +13,14 @@ const filters = {
 	COMPLETED: "completed"
 }
 
-let currentFilter = filters.ALL;
-let btns = document.getElementsByClassName('btn');
+var currentFilter = filters.ALL;
+var btns = document.getElementsByClassName('btn');
 
 function changeSelectedButton()
 {
-    let current = document.getElementsByClassName('active');
+    var current = document.getElementsByClassName('active');
     current[0].className = current[0].className.replace(' active', "");
-    let filter = localStorage.getItem('filter');
+    var filter = localStorage.getItem('filter');
     switch (filter) {
         case filters.ACTIVE:
             btns[1].className += ' active';
@@ -35,10 +35,10 @@ function changeSelectedButton()
 }
 
 for (var i = 0; i < btns.length; i++) {
-  btns[i].addEventListener('click', function(){
-    changeSelectedButton();
-  });
-}
+	btns[i].addEventListener('click', function(){
+	  changeSelectedButton();
+	});
+  }
 
 function changeItemStatus(i, state) {
 	items[i].isActive = state;
@@ -47,7 +47,7 @@ function changeItemStatus(i, state) {
 }
 
 function showClearAllButton() {
-    let completedItems = items.filter(item => item.isActive === false);
+    var completedItems = items.filter(item => item.isActive === false);
     clearButton.style.display = completedItems.length > 0 ? 'inline' : 'none';
 }
 
@@ -55,11 +55,11 @@ function onCreateItem(event) {
 	event.preventDefault();
 	newItem.value = newItem.value.trim(' ');
 
-	let isCorrectSymbols = newItem.value.match(/^[A-Za-z0-9?!,.%&@*]+$/) === null;
-	let isWithinLenght = newItem.value.length >= 3 && newItem.value.length <= 200;
+	var isCorrectSymbols = newItem.value.match(/^[A-Za-z0-9?!,.%&@*]+$/) === null;
+	var isWithinLenght = newItem.value.length >= 3 && newItem.value.length <= 200;
 
 	if(isWithinLenght) {
-		let todoItem = {
+		var todoItem = {
 			isActive: true,
 			text: newItem.value,
 			isEditable: false
@@ -72,13 +72,14 @@ function onCreateItem(event) {
 	localStorage.removeItem('newItem');
 }
 
-function editItem(i) {
-	items[i].text = document.getElementById('text_item'+i).value;
+function onEditItem(i) {
+	items[i].text = document.getElementById('text_item' + i).value;
+	console.log(items);
 	renderItems();
 	localStorage.setItem('items', JSON.stringify(items));
 }
 
-function deleteItem(i) {
+function onDeleteItem(i) {
 	items.splice(i, 1);
 	renderItems();
 	localStorage.setItem('items', JSON.stringify(items));

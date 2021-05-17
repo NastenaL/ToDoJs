@@ -1,6 +1,6 @@
 function getFromStorage() {
-	let itemsFromStorage = myStorage.getItem('items');
-	let newItemFromStorage = myStorage.getItem('newItem');
+	var itemsFromStorage = myStorage.getItem('items');
+	var newItemFromStorage = myStorage.getItem('newItem');
 
 	if(itemsFromStorage.length > 0)
 	{
