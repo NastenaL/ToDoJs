@@ -1,13 +1,13 @@
 function filterItemsByStatus(currentFilter) {
     localStorage.setItem('filter', currentFilter);
     localStorage.setItem('items', JSON.stringify(items));
-    renderItems(currentFilter);
+    renderItems();
 }
 
 function clearItems() {
     currentFilter = filters.ACTIVE;
     localStorage.setItem('filter', currentFilter);
-    renderItems(currentFilter);
+    renderItems();
 }
 
 function selectAllItems() {
@@ -24,5 +24,5 @@ function selectAllItems() {
             item.isActive = true;
         });
     }
-    renderItems(currentFilter);
+    renderItems();
 }

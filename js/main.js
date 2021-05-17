@@ -2,6 +2,8 @@ let items = [];
 let itemsBoard = document.getElementById('toDoItems');
 let newItem = document.getElementById('todoField');
 let counter = document.getElementById('counter');
+let clearButton = document.getElementById('clearAll');
+
 let myStorage = window.localStorage;
 document.addEventListener("DOMContentLoaded", getFromStorage);
 
@@ -41,12 +43,11 @@ for (var i = 0; i < btns.length; i++) {
 function changeItemStatus(i, state) {
 	items[i].isActive = state;
 	showClearAllButton();
-	renderItems(currentFilter);
+	renderItems();
 }
 
 function showClearAllButton() {
     let completedItems = items.filter(item => item.isActive === false);
-    let clearButton = document.getElementById('clearAll');
     clearButton.style.display = completedItems.length > 0 ? 'inline' : 'none';
 }
 
@@ -64,7 +65,7 @@ function onCreateItem(event) {
 			isEditable: false
 		}
 		items.push(todoItem);
-		renderItems(currentFilter);
+		renderItems();
 	}
 	newItem.value = '';
 	localStorage.setItem('items', JSON.stringify(items));
@@ -73,12 +74,12 @@ function onCreateItem(event) {
 
 function editItem(i) {
 	items[i].text = document.getElementById('text_item'+i).value;
-	renderItems(currentFilter);
+	renderItems();
 	localStorage.setItem('items', JSON.stringify(items));
 }
 
 function deleteItem(i) {
 	items.splice(i, 1);
-	renderItems(currentFilter);
+	renderItems();
 	localStorage.setItem('items', JSON.stringify(items));
 }

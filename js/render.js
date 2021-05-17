@@ -22,7 +22,7 @@ function checkFilter() {
     return filteredItems;
 }
 
-function renderItems(currentFilter) {
+function renderItems() {
     currentItems = checkFilter();
 	itemsBoard.innerHTML = '';
     
