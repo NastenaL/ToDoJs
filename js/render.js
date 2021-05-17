@@ -1,20 +1,24 @@
 function renderCounter(items) {
-	counter.innerHTML = items.length === 0 ? '' : items.length + ' items left';
+	counter.innerHTML = items.length === 0 ? items.length + ' item' : items.length + ' items left';
 }
 
-function renderItems(currentItems) {
+function checkFilter(currentItems){
     switch (currentFilter) {
         case filters.ACTIVE:
-            currentItems = items.filter(item => item.isActive === true);
+            currentItems = items.filter(item => item.isActive);
             break;
         case filters.ALL:
             currentItems = items;
             break;
         case filters.COMPLETED:
-            currentItems = items.filter(item => item.isActive === false);
+            currentItems = items.filter(item => !item.isActive);
             break;
-      }
+      };
+      return currentItems;
+}
 
+function renderItems(currentItems) {
+    currentItems = checkFilter(currentItems);
 	itemsBoard.innerHTML = '';
 
     if(items.length > 0){
