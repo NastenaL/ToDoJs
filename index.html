@@ -11,15 +11,15 @@
 		<input type="text" id="todoField" placeholder="What needs to be done?" minlength="3" maxlength="200" onchange="saveToStorage()">
 		<button type="submit">Submit</button>
   
-		<div id="toDoItems"></div>
+		<div id="toDoItems" class="toDoItems"></div>
 	</form>
 	
 	<div class="btn-group" >
-		<button onclick="getAllItems()">All</button> 
-		<button onclick="getItemsByStatus(true)">Active</button> 
-		<button onclick="getItemsByStatus(false)">Completed</button>
-		<p id="counter"></p>
+		<button class="btn active" onclick="getAllItems()">All</button> 
+		<button class="btn" onclick="getItemsByStatus(true)">Active</button> 
+		<button class="btn" onclick="getItemsByStatus(false)">Completed</button>
 		<button onclick="clearItems()" class="clearAll" id="clearAll">Clear completed</button>
+		<p id="counter"></p>
 	</div>
 </div>
 

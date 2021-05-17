@@ -1,11 +1,13 @@
 function getItemsByStatus(status)
 {
     var result = items.filter(item => item.isActive === status)
+    currentFilter = status? filters.ACTIVE : filters.COMPLETED;
     renderItems(result);
 }
 
 function getAllItems()
 {
+    currentFilter = filters.ALL;
     renderItems(items);
 }
 

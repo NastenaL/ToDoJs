@@ -5,10 +5,17 @@ var counter = document.getElementById('counter');
 var myStorage = window.localStorage;
 document.addEventListener("DOMContentLoaded", getFromStorage);
 
+const filters = {
+	ALL: "all",
+	ACTIVE: "active",
+	COMPLETED: "completed"
+}
+let currentFilter = filters.ALL;
+
 function getFromStorage() {
 	var itemsFromStorage = myStorage.getItem('items');
 	var newItemFromStorage = myStorage.getItem('newItem');
-	console.log(newItemFromStorage);
+
 	if(itemsFromStorage.length > 0)
 	{
 		items = JSON.parse(itemsFromStorage);
@@ -31,7 +38,8 @@ function createItem(event) {
 	if(isWithinLenght) {
 		let todoItem = {
 			isActive: true,
-			text: newItem.value
+			text: newItem.value,
+			isEditable: false
 		}
 		items.push(todoItem);
 		renderItems(items);
@@ -69,4 +77,14 @@ function showClearAllButton() {
 function saveToStorage()
 {
     localStorage.setItem('newItem', newItem.value);
+}
+
+var btns = document.getElementsByClassName('btn');
+console.log("btn" + btns);
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener('click', function(){
+    var current = document.getElementsByClassName('active');
+    current[0].className = current[0].className.replace(' active', "");
+    this.className += ' active';
+  });
 }

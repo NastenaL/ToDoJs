@@ -2,12 +2,27 @@ function renderCounter(items) {
 	counter.innerHTML = items.length === 0 ? '' : items.length + ' items left';
 }
 
-function renderItems(items) {
-	itemsBoard.innerHTML = '';
-    var selectAll = createSelectAllButton();
-    itemsBoard.appendChild(selectAll);
+function renderItems(currentItems) {
+    switch (currentFilter) {
+        case filters.ACTIVE:
+            currentItems = items.filter(item => item.isActive === true);
+            break;
+        case filters.ALL:
+            currentItems = items;
+            break;
+        case filters.COMPLETED:
+            currentItems = items.filter(item => item.isActive === false);
+            break;
+      }
 
-	items.forEach((item, i) => {
+	itemsBoard.innerHTML = '';
+
+    if(items.length > 0){
+        var selectAll = createSelectAllButton();
+        itemsBoard.appendChild(selectAll);
+    }
+
+	currentItems.forEach((item, i) => {
 		var div = createParentDiv(item, i);
 		var checkbox = createStatusCheckBox(item, i);
 		var span = createSpan(item, i);
@@ -17,69 +32,91 @@ function renderItems(items) {
 		div.appendChild(checkbox);
         div.appendChild(textInput);
 		div.appendChild(span);
-		div.appendChild(deleteButton);
-		div.appendChild(document.createElement('br'));
+        div.appendChild(deleteButton);
 		itemsBoard.appendChild(div);
 	});
 	  
-	renderCounter(items);
+	renderCounter(currentItems);
 }
 
 function createSpan(item, i) {
     var span = document.createElement('span');
     span.innerText = item.text;
     span.id = "span" + i;
+    span.className = 'span';
+    span.style.float = 'left';
+    span.style.width = '150px';
+
+    if(!item.isActive)
+	{
+		span.style.textDecoration = 'line-through';
+        span.style.opacity = "0.5";
+	}
     span.addEventListener('dblclick', function () {
-        renderTextInput(i);
+        items.forEach(item => {
+            item.isEditable = false;
+        });
+        item.isEditable = true;
+        renderTextInput();
     });
     return span;
 }
 
-function renderTextInput(i) {
-    var checkbox = document.getElementById('checkbox' + i);
-    checkbox.style.display = 'none';
-    var span = document.getElementById('span' + i);
-    span.style.display = 'none';
-    var button = document.getElementById('delete_item' + i);
-	button.style.display = 'none';
-    var textInput = document.getElementById('text_item' + i);
-    textInput.style.display = 'inline';
+function renderTextInput() {
+    console.log(items);
+    items.forEach((item, i) => {
+        var checkbox = document.getElementById('checkbox' + i);
+        var span = document.getElementById('span' + i);
+        var button = document.getElementById('delete_item' + i);
+        var textInput = document.getElementById('text_item' + i);
+        
+        checkbox.style.display = item.isEditable? 'none' : 'inline';
+        span.style.display = item.isEditable? 'none' : 'inline';
+	    button.style.display = 'none';
+        textInput.style.display = item.isEditable? 'inline' : 'none';
+    });
 }
 
 function createTextInput(item, i)
 {
     var textInput  = document.createElement('input');
-        textInput.type = "text";
-        textInput.id = "text_item" + i;
-        textInput.value = item.text;
-        textInput.style.display = 'none';
-        textInput.addEventListener("keydown", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                editItem(i);
-            }
-        });
-        textInput.addEventListener("blur", function() {
-			editItem(i);
-        });
+    textInput.type = "text";
+    textInput.id = "text_item" + i;
+    textInput.value = item.text;
+    textInput.style.display = 'none';
+    textInput.style.minlength = 3;
+    textInput.style.maxlength = 200;
 
-        return textInput;
+    let isWithinLenght = newItem.value.length >= 3 && newItem.value.length <= 200;
+
+    textInput.addEventListener("keydown", function(event) {
+        if (event.key === "Enter" && isWithinLenght) {
+            event.preventDefault();
+            item.isEditable = false;
+            editItem(i);
+        }
+    });
+    textInput.addEventListener("blur", function() {
+        if(isWithinLenght){
+            item.isEditable = false;
+            editItem(i);
+        }
+    });
+
+    return textInput;
 }
 
 function createParentDiv(item, i)
 {
     var div = document.createElement('div');
 	div.id = "div_item" + i;
-		
-	if(!item.isActive)
-	{
-		div.style.textDecoration = 'line-through';
-        div.style.opacity = "0.5";
-	}
+    div.style.height = '30px';
 
 	div.addEventListener("mouseenter", function () {
-		let button = document.getElementById('delete_item' + i);
-		button.style.display = 'inline';
+        if(!item.isEditable) {
+            let button = document.getElementById('delete_item' + i);
+            button.style.display = 'inline';
+        }
 	});
 
 	div.addEventListener("mouseleave", function () {
@@ -94,6 +131,7 @@ function createStatusCheckBox(item, i)
     var checkbox = document.createElement('input');
 		checkbox.type = "checkbox";
 		checkbox.id = "checkbox" + i;
+        checkbox.style.float = 'left';
 		checkbox.checked = !item.isActive;
 
 		checkbox.addEventListener("change", function () {
@@ -109,6 +147,7 @@ function createDeleteItemButton(i)
 		deleteButton.id = "delete_item" + i;
 		deleteButton.textContent = "x";
 		deleteButton.style.display = 'none';
+        deleteButton.style.float = 'left';
 
 		deleteButton.addEventListener('click', function () {
 			deleteItem(i);

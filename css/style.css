@@ -1,6 +1,6 @@
 .checklist {
-  max-width: 800px;
-  max-height: 600px;
+  min-width: 800px;
+  min-height: 600px;
   position: relative;
   text-align: left;
   border-style: solid;
@@ -12,6 +12,8 @@
 
 .clearAll {
 	display: none;
+	position: absolute;
+	right: 0;
 }
 
 button {
@@ -20,14 +22,33 @@ button {
 	color: white;
 }
 
+.btn-group {
+	position: absolute;
+	bottom: 0;
+	width: 700px;;
+}
+
 .btn-group button {
-	background-color: #04AA6D;
-	border: 1px solid green;
-	color: white;
 	padding: 10px 24px; 
 	cursor: pointer; 
 	float: left; 
 }
+
+.btn {
+	border: none;
+	outline: none;
+	padding: 12px 16px;
+	cursor: pointer;
+  }
+  
+  .btn:hover {
+	background-color: #ddd;
+  }
+  
+  .btn.active {
+	background-color: #666;
+	color: white;
+  }
 
 .btn-group button:not(:last-child) {
 	border-right: none;
@@ -43,4 +64,9 @@ footer {
     height : 40px;
     margin-top : 40px;
 	display:block;
+}
+
+.toDoItems {
+	max-height: 400px;
+	overflow-y: auto;
 }
