@@ -1,22 +1,24 @@
-function renderCounter(items) {
-	counter.innerHTML = items.length === 0 ? items.length + ' item' : items.length + ' items left';
+function Renderer() {
 }
 
-function renderItems() {
+Renderer.prototype.calculateCounter = function(items) {
+    return counter.innerHTML = items.length === 0 ? items.length + ' item' : items.length + ' items left';
+}
+
+Renderer.prototype.renderItems = function() {
     currentItems = checkFilter();
 	itemsBoard.innerHTML = '';
     
     if(currentItems.length > 0){
-        var selectAll = createSelectAllButton();
-        itemsBoard.appendChild(selectAll);
+//select all
     }
 
-	currentItems.forEach((item, i) => {
-		var div = createParentDiv(item, i);
-		var checkbox = createStatusCheckBox(item, i);
-		var span = createSpan(item, i);
-        var textInput  = createTextInput(item, i);
-		var deleteButton = createDeleteItemButton(i);
+	currentItems.forEach((item) => {
+		var div = createParentDiv(item);
+		var checkbox = createStatusCheckBox(item);
+		var span = createSpan(item);
+        var textInput  = createTextInput(item);
+		var deleteButton = createDeleteItemButton(item.index);
 
 		div.appendChild(checkbox);
         div.appendChild(textInput);
@@ -25,13 +27,18 @@ function renderItems() {
 		itemsBoard.appendChild(div);
 	});
 	  
-	renderCounter(currentItems);
+	this.calculateCounter(currentItems);
 }
 
-function createSpan(item, i) {
+var selectAll = document.getElementById('selectAll');
+selectAll.addEventListener('click', function () {
+    selectAllItems();
+});
+
+function createSpan(item) {
     var span = document.createElement('span');
     span.innerText = item.text;
-    span.id = "span" + i;
+    span.id = "span" + item.index;
     span.className = 'span';
     span.style.float = 'left';
     span.style.width = '150px';
@@ -52,11 +59,11 @@ function createSpan(item, i) {
 }
 
 function renderTextInput() {
-    items.forEach((item, i) => {
-        var checkbox = document.getElementById('checkbox' + i);
-        var span = document.getElementById('span' + i);
-        var button = document.getElementById('delete_item' + i);
-        var textInput = document.getElementById('text_item' + i);
+    items.forEach((item) => {
+        var checkbox = document.getElementById('checkbox' + item.index);
+        var span = document.getElementById('span' + item.index);
+        var button = document.getElementById('delete_item' + item.index);
+        var textInput = document.getElementById('text_item' + item.index);
         
         checkbox.style.display = item.isEditable? 'none' : 'inline';
         span.style.display = item.isEditable? 'none' : 'inline';
@@ -65,11 +72,11 @@ function renderTextInput() {
     });
 }
 
-function createTextInput(item, i)
+function createTextInput(item)
 {
     var textInput  = document.createElement('input');
     textInput.type = "text";
-    textInput.id = "text_item" + i;
+    textInput.id = "text_item" + item.index;
     textInput.value = item.text;
     textInput.style.display = 'none';
     textInput.style.minlength = 3;
@@ -81,49 +88,54 @@ function createTextInput(item, i)
         if (event.key === "Enter" && isWithinLenght) {
             event.preventDefault();
             item.isEditable = false;
-            onEditItem(i);
+            onEditItem(item.index);
         }
     });
-    textInput.addEventListener("blur", function() {
+
+    document.addEventListener("blur", function() {
         if(isWithinLenght){
             item.isEditable = false;
-            onEditItem(i);
+            onEditItem(item.index);
         }
     });
 
     return textInput;
 }
 
-function createParentDiv(item, i)
+function createParentDiv(item)
 {
     var div = document.createElement('div');
-	div.id = "div_item" + i;
+	div.id = "div_item" + item.index;
     div.style.height = '30px';
 
-    var button = document.getElementById('delete_item' + i);
-
 	div.addEventListener("mouseenter", function () {
-        if(!item.isEditable) {
-            button.style.display = 'inline';
-        }
+        showDeleteButton(item);
 	});
 
 	div.addEventListener("mouseleave", function () {
+        var button = document.getElementById('delete_item' + item.index);
 		button.style.display = 'none';
 	});
     return div;
 }
 
-function createStatusCheckBox(item, i)
+function showDeleteButton(item) {
+    var button = document.getElementById('delete_item' + item.index);
+    if(!item.isEditable) {
+        button.style.display = 'inline';
+    }
+}
+
+function createStatusCheckBox(item)
 {
     var checkbox = document.createElement('input');
 	checkbox.type = "checkbox";
-	checkbox.id = "checkbox" + i;
+	checkbox.id = "checkbox" + item.index;
     checkbox.style.float = 'left';
 	checkbox.checked = !item.isActive;
 
 	checkbox.addEventListener("change", function () {
-		changeItemStatus(i, !item.isActive);
+		onChangeItemStatus(item.index, !checkbox.checked);
 	});
     
     return checkbox;
@@ -142,17 +154,4 @@ function createDeleteItemButton(i)
 	});
 
     return deleteButton;
-}
-
-function createSelectAllButton()
-{
-    var selectAll = document.createElement('button');
-    selectAll.textContent = "SelectAll";
-    selectAll.style.margin = "10px";
-
-    selectAll.addEventListener('click', function () {
-		selectAllItems();
-	});
-
-    return selectAll;
 }

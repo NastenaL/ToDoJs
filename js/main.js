@@ -1,11 +1,20 @@
-var items = [];
+var items = new ItemsCollection();
 var itemsBoard = document.getElementById('toDoItems');
-var newItem = document.getElementById('todoField');
+var todoField = document.getElementById('todoField');
 var counter = document.getElementById('counter');
 var clearButton = document.getElementById('clearAll');
 
-var myStorage = window.localStorage;
-document.addEventListener("DOMContentLoaded", getFromStorage);
+var myStorage = new Storage();
+var renderer = new Renderer();
+
+document.addEventListener("DOMContentLoaded", function() {
+	myStorage.loadItems();
+	changeSelectedButton();
+});
+
+todoField.addEventListener("change", function() {
+	myStorage.saveTo('todoField', todoField.value);
+});
 
 const filters = {
 	ALL: "all",
@@ -13,37 +22,39 @@ const filters = {
 	COMPLETED: "completed"
 }
 
-var currentFilter = filters.ALL;
-var btns = document.getElementsByClassName('btn');
+var currentFilter = new Filter(filters.ALL);
 
 function changeSelectedButton()
 {
     var current = document.getElementsByClassName('active');
     current[0].className = current[0].className.replace(' active', "");
-    var filter = localStorage.getItem('filter');
+    var filter = myStorage.getByKey('filter');
     switch (filter) {
         case filters.ACTIVE:
-            btns[1].className += ' active';
+            document.getElementById('active').className += ' active';
             break;
         case filters.ALL:
-            btns[0].className += ' active';
+            document.getElementById('all').className += ' active';
             break;
         case filters.COMPLETED:
-            btns[2].className += ' active';
+            document.getElementById('completed').className += ' active';
             break;
     };
 }
 
-for (var i = 0; i < btns.length; i++) {
-	btns[i].addEventListener('click', function(){
-	  changeSelectedButton();
-	});
-  }
-
-function changeItemStatus(i, state) {
-	items[i].isActive = state;
+var filterDiv = document.getElementById('filter');
+filterDiv.addEventListener('click', function(){
+	changeSelectedButton();
+});
+  
+function onChangeItemStatus(i, state) {
+	var item = items.filter(t => t.index === i);
+	console.log(item);
+	var index = items.indexOf(item);
+	console.log(items[index]);
+	items[index].isActive = state;
 	showClearAllButton();
-	renderItems();
+	renderer.renderItems();
 }
 
 function showClearAllButton() {
@@ -53,34 +64,29 @@ function showClearAllButton() {
 
 function onCreateItem(event) {
 	event.preventDefault();
-	newItem.value = newItem.value.trim(' ');
+	todoField.value = todoField.value.trim(' ');
 
-	var isCorrectSymbols = newItem.value.match(/^[A-Za-z0-9?!,.%&@*]+$/) === null;
-	var isWithinLenght = newItem.value.length >= 3 && newItem.value.length <= 200;
+	var isCorrectSymbols = todoField.value.match(/^[A-Za-z0-9?!,.%&@*]+$/) === null;
+	var isWithinLength = todoField.value.length >= 3 && todoField.value.length <= 200;
 
-	if(isWithinLenght) {
-		var todoItem = {
-			isActive: true,
-			text: newItem.value,
-			isEditable: false
-		}
-		items.push(todoItem);
-		renderItems();
+	if(isWithinLength) {
+		var todoItem = new Item(todoField.value, true, items.items.length + 1, false);
+		items.add(todoItem);
+		renderer.renderItems();
 	}
-	newItem.value = '';
-	localStorage.setItem('items', JSON.stringify(items));
-	localStorage.removeItem('newItem');
+	todoField.value = '';
+	myStorage.saveTo('items', JSON.stringify(items.items));
+	myStorage.deleteItem('todoField');
 }
 
 function onEditItem(i) {
-	items[i].text = document.getElementById('text_item' + i).value;
-	console.log(items);
-	renderItems();
-	localStorage.setItem('items', JSON.stringify(items));
+	items.items[i].text = document.getElementById('text_item' + i).value;
+	renderer.renderItems();
+	myStorage.saveTo('items', JSON.stringify(items.items));
 }
 
 function onDeleteItem(i) {
-	items.splice(i, 1);
-	renderItems();
-	localStorage.setItem('items', JSON.stringify(items));
+	items.items.splice(i, 1);
+	renderer.renderItems();
+	myStorage.saveTo('items', JSON.stringify(items.items));
 }

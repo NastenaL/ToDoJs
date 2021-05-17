@@ -1,20 +1,31 @@
-function getFromStorage() {
-	var itemsFromStorage = myStorage.getItem('items');
-	var newItemFromStorage = myStorage.getItem('newItem');
-
-	if(itemsFromStorage.length > 0)
-	{
-		items = JSON.parse(itemsFromStorage);
-		renderItems(currentFilter);
-	}
-
-	if(newItemFromStorage != null)
-	{
-		newItem.value = newItemFromStorage;
-	}
-	changeSelectedButton();
+function Storage() {
+    this.localStorage = window.localStorage;
 }
 
-function saveToStorage() {
-    localStorage.setItem('newItem', newItem.value);
+Storage.prototype.saveTo = function(key, value) {
+    this.localStorage.setItem(key, value);
+}
+
+Storage.prototype.getByKey = function(key) {
+    return this.localStorage.getItem(key);
+}
+
+Storage.prototype.deleteItem = function(key) {
+    this.localStorage.removeItem(key);
+}
+
+Storage.prototype.loadItems = function() {
+    var itemsFromStorage = myStorage.getByKey('items');
+	var todoFieldFromStorage = myStorage.getByKey('todoField');
+
+	if(itemsFromStorage !== null)
+	{
+		items = JSON.parse(itemsFromStorage);
+		renderer.renderItems(currentFilter);
+	}
+
+	if(todoFieldFromStorage != null)
+	{
+		todoField.value = todoFieldFromStorage;
+	}
 }

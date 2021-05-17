@@ -8,25 +8,30 @@
 <div class="checklist">
 	<h1>ToDo</h1>
 	<form onsubmit="onCreateItem(event)">
-		<input type="text" id="todoField" placeholder="What needs to be done?" minlength="3" maxlength="200" onchange="saveToStorage()">
+		<input type="text" id="todoField" placeholder="What needs to be done?" minlength="3" maxlength="200">
 		<button type="submit">Submit</button>
   
 		<div id="toDoItems" class="toDoItems"></div>
 	</form>
 	
-	<div class="btn-group" >
-		<button class="btn active" onclick="filterItemsByStatus(filters.ALL)">All</button> 
-		<button class="btn" onclick="filterItemsByStatus(filters.ACTIVE)">Active</button> 
-		<button class="btn" onclick="filterItemsByStatus(filters.COMPLETED)">Completed</button>
-		<button onclick="clearItems()" class="clearAll" id="clearAll">Clear completed</button>
+	<button id="selectAll" style="display: none;">Select All</button>
+
+	<div class="btn-group">
+		<div id="filter">
+			<button class="btn active" id="all">All</button> 
+			<button class="btn" id="active">Active</button> 
+			<button class="btn" id="completed">Completed</button>
+		</div>
+		<button class="clearAll" id="clearAll">Clear completed</button>
 		<p id="counter"></p>
 	</div>
 </div>
 
 <footer>Double-click to edit a todo</footer>
 <script src="js/storage.js"></script>
-<script src="js/main.js"></script>
 <script src="js/filter.js"></script>
 <script src="js/render.js"></script>
+<script src="js/item.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>

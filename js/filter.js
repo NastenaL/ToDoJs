@@ -1,36 +1,54 @@
-function filterItemsByStatus(currentFilter) {
-    localStorage.setItem('filter', currentFilter);
-    localStorage.setItem('items', JSON.stringify(items));
-    renderItems();
+function Filter(filter){
+    this.setFilter(filter);
+}
+    
+Filter.prototype.setFilter = function(filter) {
+    this.filter = filter;
+}
+    
+Filter.prototype.getFilter = function() {
+    return this.filter;
 }
 
-function clearItems() {
-    currentFilter = filters.ACTIVE;
-    localStorage.setItem('filter', currentFilter);
-    renderItems();
+function onFilterItemsByStatus(filter) {
+    currentFilter.setFilter(filter);
+    myStorage.saveTo('filter', currentFilter.getFilter());
+    myStorage.saveTo('items', JSON.stringify(items));
+    renderer.renderItems();
+}
+
+var clearButton = document.getElementById('clearAll');
+clearButton.addEventListener('click', function() {
+    onClearCompletedItems();
+});
+
+function onClearCompletedItems() {
+    items = items.filter(item => item.isActive);
+    currentFilter.setFilter(filters.ACTIVE);
+    myStorage.saveTo('filter', currentFilter.getFilter());
+    renderer.renderItems();
 }
 
 function selectAllItems() {
-    var completedItems = items.filter(item => !item.isActive);
-    var activeItems = items.filter(item => item.isActive);
-    if(completedItems.length > 0){
-        items.forEach((item, i) => {
+    var isSomeActive = items.some(item => item.isActive);
+    if(isSomeActive){
+        items.forEach((item) => {
             item.isActive = false;
         });
     }
-    
-    if(activeItems.length == 0) {
-        items.forEach((item, i) => {
+    else {
+        items.forEach((item) => {
             item.isActive = true;
         });
     }
-    renderItems();
+
+    renderer.renderItems();
 }
 
 function checkFilter() {
-    var filter = localStorage.getItem('filter');
+    var filter = myStorage.getByKey('filter');
     if(filter != null){
-        currentFilter = filter;
+        currentFilter.setFilter(filter);
     }
     var filteredItems = [];
     switch (filter) {
@@ -46,3 +64,7 @@ function checkFilter() {
     };
     return filteredItems;
 }
+
+document.getElementById('filter').addEventListener('click', function (event) {
+    onFilterItemsByStatus(event.target.id);
+});
