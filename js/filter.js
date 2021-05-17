@@ -1,35 +1,34 @@
 function getItemsByStatus(status) {
-    var result = items.filter(item => item.isActive === status)
-    currentFilter = status? filters.ACTIVE : filters.COMPLETED;
-    console.log("test" + currentFilter);
-    renderItems(result);
+    currentFilter = status? filters.ACTIVE : filters.COMPLETED;2
+    localStorage.setItem('filter', currentFilter);
+    renderItems(currentFilter);
 }
 
 function getAllItems() {
     currentFilter = filters.ALL;
     localStorage.setItem('filter', currentFilter);
-    renderItems(items);
+    renderItems(currentFilter);
 }
 
 function clearItems() {
-    items = items.filter(function(x) { return x.isActive; });
-    renderItems(items);
+    currentFilter = filters.ACTIVE;
+    localStorage.setItem('filter', currentFilter);
+    renderItems(currentFilter);
 }
 
 function selectAllItems() {
     var completedItems = items.filter(item => !item.isActive);
     var activeItems = items.filter(item => item.isActive);
     if(completedItems.length > 0){
-        var selectedItems = items.forEach((item, i) => {
+        items.forEach((item, i) => {
             item.isActive = false;
         });
-        renderItems(selectedItems);
     }
-    console.log(activeItems);
+    
     if(activeItems.length == 0) {
-        var selectedItems = items.forEach((item, i) => {
+        items.forEach((item, i) => {
             item.isActive = true;
         });
-        renderItems(selectedItems);
     }
+    renderItems(currentFilter);
 }

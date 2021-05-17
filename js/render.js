@@ -2,35 +2,31 @@ function renderCounter(items) {
 	counter.innerHTML = items.length === 0 ? items.length + ' item' : items.length + ' items left';
 }
 
-function checkFilter(currentItems) {
+function checkFilter() {
     let filter = localStorage.getItem('filter');
     if(filter != null){
         currentFilter = filter;
     }
-
-    console.log(filter);
+    var filteredItems = [];
     switch (filter) {
         case filters.ACTIVE:
-            console.log(1);
-            currentItems = items.filter(item => item.isActive);
+            filteredItems = items.filter(item => item.isActive);
             break;
         case filters.ALL:
-            console.log('all');
-            currentItems = items;
+            filteredItems = items;
             break;
         case filters.COMPLETED:
-            console.log(2);
-            currentItems = items.filter(item => !item.isActive);
+            filteredItems = items.filter(item => !item.isActive);
             break;
-      };
-      return currentItems;
+    };
+    return filteredItems;
 }
 
-function renderItems(currentItems) {
-    currentItems = checkFilter(currentItems);
+function renderItems(currentFilter) {
+    currentItems = checkFilter();
 	itemsBoard.innerHTML = '';
-
-    if(items.length > 0){
+    
+    if(currentItems.length > 0){
         var selectAll = createSelectAllButton();
         itemsBoard.appendChild(selectAll);
     }
@@ -76,7 +72,6 @@ function createSpan(item, i) {
 }
 
 function renderTextInput() {
-    console.log(items);
     items.forEach((item, i) => {
         var checkbox = document.getElementById('checkbox' + i);
         var span = document.getElementById('span' + i);
@@ -180,13 +175,4 @@ function createSelectAllButton()
 	});
 
     return selectAll;
-}
-
-var btns = document.getElementsByClassName('btn');
-for (var i = 0; i < btns.length; i++) {
-  btns[i].addEventListener('click', function(){
-    var current = document.getElementsByClassName('active');
-    current[0].className = current[0].className.replace(' active', "");
-    this.className += ' active';
-  });
 }

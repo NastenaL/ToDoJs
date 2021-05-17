@@ -13,6 +13,32 @@ const filters = {
 
 let currentFilter = filters.ALL;
 
+var btns = document.getElementsByClassName('btn');
+
+function changeSelectedButton()
+{
+    var current = document.getElementsByClassName('active');
+    current[0].className = current[0].className.replace(' active', "");
+    let filter = localStorage.getItem('filter');
+    switch (filter) {
+        case filters.ACTIVE:
+            btns[1].className += ' active';
+            break;
+        case filters.ALL:
+            btns[0].className += ' active';
+            break;
+        case filters.COMPLETED:
+            btns[2].className += ' active';
+            break;
+    };
+}
+
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener('click', function(){
+    changeSelectedButton();
+  });
+}
+
 function getFromStorage() {
 	var itemsFromStorage = myStorage.getItem('items');
 	var newItemFromStorage = myStorage.getItem('newItem');
@@ -20,13 +46,14 @@ function getFromStorage() {
 	if(itemsFromStorage.length > 0)
 	{
 		items = JSON.parse(itemsFromStorage);
-		renderItems(items);
+		renderItems(currentFilter);
 	}
 
 	if(newItemFromStorage != null)
 	{
 		newItem.value = newItemFromStorage;
 	}
+	changeSelectedButton();
 }
 
 function createItem(event) {
@@ -43,7 +70,7 @@ function createItem(event) {
 			isEditable: false
 		}
 		items.push(todoItem);
-		renderItems(items);
+		renderItems(currentFilter);
 	}
 	newItem.value = '';
 	localStorage.setItem('items', JSON.stringify(items));
@@ -52,20 +79,20 @@ function createItem(event) {
 
 function editItem(i) {
 	items[i].text = document.getElementById('text_item'+i).value;
-	renderItems(items);
+	renderItems(currentFilter);
 	localStorage.setItem('items', JSON.stringify(items));
 }
 
 function deleteItem(i) {
 	items.splice(i, 1);
-	renderItems(items);
+	renderItems(currentFilter);
 	localStorage.setItem('items', JSON.stringify(items));
 }
 
 function changeItemStatus(i, state) {
 	items[i].isActive = state;
 	showClearAllButton();
-	renderItems(items);
+	renderItems(currentFilter);
 }
 
 function showClearAllButton() {
